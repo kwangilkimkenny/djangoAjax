@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create | Ajax</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <center>
+        <h1>Enter the asking values!</h1>
+    <br>
+    <form id="post-form" method="POST">
+        {% csrf_token %}
+        Name : <input type="text" name='name' id="name">
+        <br> <br>
+        Age : <input type="number" name='age' id="age">
+        <br> <br>
+        <input type="submit">
+        <br> <br>
+        <p id="state"></p>
+    </form>
+    </center>
+    
+
+    <script>
+        $(document).on('submit','#post-form',function(e){
+
+            e.preventDefault();
+            $("#state").empty();
+            $("#state").append("Sending...");
+
+
+            $.ajax({
+                
+                type: 'POST',
+                url: "{% url 'createData' %}",
+                data: {
+                    name : $('#name').val(),
+                    age : $('#age').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success : function(data){
+                    //alert(data);
+                    $("#state").empty();
+                    $("#state").append(data);
+                    document.getElementById("post-form").reset();
+                    
+                },
+                    
+            }); 
+    });
+    </script>
+
+</body>
+</html>
